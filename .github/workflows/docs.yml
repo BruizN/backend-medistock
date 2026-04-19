@@ -1,0 +1,35 @@
+name: Publicar Documentacion C4
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.dsl'
+      - '.github/workflows/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Preparar carpeta public
+        run: |
+          mkdir -p public
+          chmod 777 public
+
+      - name: Generar Sitio con Structurizr Site Generatr
+        uses: docker://ghcr.io/avisi-cloud/structurizr-site-generatr:latest
+        with:
+          args: generate-site -w workspace.dsl -o public
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
