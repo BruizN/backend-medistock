@@ -1,0 +1,24 @@
+@startuml
+set separator none
+title Medistock E-Commerce - System Context
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+Person(InstituciónClínica, "Institución (Clínica)", $descr="Compra insumos médicos al por mayor.", $tags="", $link="")
+System(PasareladePagos, "Pasarela de Pagos", $descr="Procesa pagos (Webpay/MercadoPago).", $tags="", $link="")
+System(APIdeLogística, "API de Logística", $descr="Genera tracking de despachos (Shippo/Mock).", $tags="", $link="")
+Person(Paciente, "Paciente", $descr="Compra insumos médicos (B2C).", $tags="", $link="")
+System(MedistockECommerce, "Medistock E-Commerce", $descr="Plataforma centralizada para venta y distribución de insumos.", $tags="", $link="")
+System(SistemasERPClínicas, "Sistemas ERP (Clínicas)", $descr="Sistema externo que consume la API para abastecimiento automatizado.", $tags="", $link="")
+
+Rel(InstituciónClínica, MedistockECommerce, "Realiza pedidos", $techn="", $tags="", $link="")
+Rel(Paciente, MedistockECommerce, "Realiza compras", $techn="", $tags="", $link="")
+Rel(SistemasERPClínicas, MedistockECommerce, "Consume catálogo y stock", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce, PasareladePagos, "Inicia pagos", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce, APIdeLogística, "Solicita tracking", $techn="REST/HTTPS", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml

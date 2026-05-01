@@ -1,0 +1,287 @@
+{
+  "configuration" : { },
+  "description" : "Plataforma de comercio electrónico unificada para insumos médicos.",
+  "documentation" : { },
+  "id" : 0,
+  "model" : {
+    "people" : [ {
+      "description" : "Compra insumos médicos al por mayor.",
+      "id" : "1",
+      "location" : "Unspecified",
+      "name" : "Institución (Clínica)",
+      "properties" : {
+        "structurizr.dsl.identifier" : "institucion"
+      },
+      "relationships" : [ {
+        "description" : "Realiza pedidos",
+        "destinationId" : "3",
+        "id" : "12",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Compra insumos médicos (B2C).",
+      "id" : "2",
+      "location" : "Unspecified",
+      "name" : "Paciente",
+      "properties" : {
+        "structurizr.dsl.identifier" : "paciente"
+      },
+      "relationships" : [ {
+        "description" : "Realiza compras",
+        "destinationId" : "3",
+        "id" : "13",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "description" : "Provee servicios de catálogo, inventario y órdenes",
+        "documentation" : { },
+        "id" : "4",
+        "name" : "API RESTful (FastAPI)",
+        "properties" : {
+          "structurizr.dsl.identifier" : "apiapp"
+        },
+        "relationships" : [ {
+          "description" : "Lee de y escribe en",
+          "destinationId" : "5",
+          "id" : "7",
+          "sourceId" : "4",
+          "tags" : "Relationship",
+          "technology" : "SQL/AsyncPG"
+        }, {
+          "description" : "Inicia pagos",
+          "destinationId" : "10",
+          "id" : "16",
+          "sourceId" : "4",
+          "tags" : "Relationship",
+          "technology" : "REST/HTTPS"
+        }, {
+          "description" : "Solicita tracking",
+          "destinationId" : "11",
+          "id" : "18",
+          "sourceId" : "4",
+          "tags" : "Relationship",
+          "technology" : "REST/HTTPS"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Python/FastAPI"
+      }, {
+        "description" : "Almacena información de productos, inventario, usuarios y órdenes",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Base de Datos",
+        "properties" : {
+          "structurizr.dsl.identifier" : "database"
+        },
+        "relationships" : [ {
+          "description" : "Almacena datos en",
+          "destinationId" : "6",
+          "id" : "8",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "I/O"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "PostgreSQL"
+      }, {
+        "description" : "Persistencia física de la base de datos",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "Volumen de Datos",
+        "properties" : {
+          "structurizr.dsl.identifier" : "storagevolume"
+        },
+        "tags" : "Element,Container",
+        "technology" : "Docker Volume (pg_data)"
+      } ],
+      "description" : "Plataforma centralizada para venta y distribución de insumos.",
+      "documentation" : { },
+      "id" : "3",
+      "location" : "Unspecified",
+      "name" : "Medistock E-Commerce",
+      "properties" : {
+        "structurizr.dsl.identifier" : "medistocksystem"
+      },
+      "relationships" : [ {
+        "description" : "Inicia pagos",
+        "destinationId" : "10",
+        "id" : "17",
+        "linkedRelationshipId" : "16",
+        "sourceId" : "3",
+        "technology" : "REST/HTTPS"
+      }, {
+        "description" : "Solicita tracking",
+        "destinationId" : "11",
+        "id" : "19",
+        "linkedRelationshipId" : "18",
+        "sourceId" : "3",
+        "technology" : "REST/HTTPS"
+      } ],
+      "tags" : "Element,Software System"
+    }, {
+      "description" : "Sistema externo que consume la API para abastecimiento automatizado.",
+      "documentation" : { },
+      "id" : "9",
+      "location" : "Unspecified",
+      "name" : "Sistemas ERP (Clínicas)",
+      "properties" : {
+        "structurizr.dsl.identifier" : "erpsystem"
+      },
+      "relationships" : [ {
+        "description" : "Consume catálogo y stock",
+        "destinationId" : "4",
+        "id" : "14",
+        "sourceId" : "9",
+        "tags" : "Relationship",
+        "technology" : "REST/HTTPS"
+      }, {
+        "description" : "Consume catálogo y stock",
+        "destinationId" : "3",
+        "id" : "15",
+        "linkedRelationshipId" : "14",
+        "sourceId" : "9",
+        "technology" : "REST/HTTPS"
+      } ],
+      "tags" : "Element,Software System"
+    }, {
+      "description" : "Procesa pagos (Webpay/MercadoPago).",
+      "documentation" : { },
+      "id" : "10",
+      "location" : "Unspecified",
+      "name" : "Pasarela de Pagos",
+      "properties" : {
+        "structurizr.dsl.identifier" : "paymentgateway"
+      },
+      "tags" : "Element,Software System"
+    }, {
+      "description" : "Genera tracking de despachos (Shippo/Mock).",
+      "documentation" : { },
+      "id" : "11",
+      "location" : "Unspecified",
+      "name" : "API de Logística",
+      "properties" : {
+        "structurizr.dsl.identifier" : "logisticsapi"
+      },
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Medistock",
+  "properties" : {
+    "structurizr.dsl" : "d29ya3NwYWNlICJNZWRpc3RvY2siICJQbGF0YWZvcm1hIGRlIGNvbWVyY2lvIGVsZWN0csOzbmljbyB1bmlmaWNhZGEgcGFyYSBpbnN1bW9zIG3DqWRpY29zLiIgewoKICAgIG1vZGVsIHsKICAgICAgICBpbnN0aXR1Y2lvbiA9IHBlcnNvbiAiSW5zdGl0dWNpw7NuIChDbMOtbmljYSkiICJDb21wcmEgaW5zdW1vcyBtw6lkaWNvcyBhbCBwb3IgbWF5b3IuIgogICAgICAgIHBhY2llbnRlID0gcGVyc29uICJQYWNpZW50ZSIgIkNvbXByYSBpbnN1bW9zIG3DqWRpY29zIChCMkMpLiIKICAgICAgICAKICAgICAgICBtZWRpc3RvY2tTeXN0ZW0gPSBzb2Z0d2FyZVN5c3RlbSAiTWVkaXN0b2NrIEUtQ29tbWVyY2UiICJQbGF0YWZvcm1hIGNlbnRyYWxpemFkYSBwYXJhIHZlbnRhIHkgZGlzdHJpYnVjacOzbiBkZSBpbnN1bW9zLiIgewogICAgICAgICAgICAKICAgICAgICAgICAgYXBpQXBwID0gY29udGFpbmVyICJBUEkgUkVTVGZ1bCAoRmFzdEFQSSkiICJQcm92ZWUgc2VydmljaW9zIGRlIGNhdMOhbG9nbywgaW52ZW50YXJpbyB5IMOzcmRlbmVzIiAiUHl0aG9uL0Zhc3RBUEkiCiAgICAgICAgICAgIGRhdGFiYXNlID0gY29udGFpbmVyICJCYXNlIGRlIERhdG9zIiAiQWxtYWNlbmEgaW5mb3JtYWNpw7NuIGRlIHByb2R1Y3RvcywgaW52ZW50YXJpbywgdXN1YXJpb3MgeSDDs3JkZW5lcyIgIlBvc3RncmVTUUwiCiAgICAgICAgICAgIHN0b3JhZ2VWb2x1bWUgPSBjb250YWluZXIgIlZvbHVtZW4gZGUgRGF0b3MiICJQZXJzaXN0ZW5jaWEgZsOtc2ljYSBkZSBsYSBiYXNlIGRlIGRhdG9zIiAiRG9ja2VyIFZvbHVtZSAocGdfZGF0YSkiCiAgICAgICAgICAgIAogICAgICAgICAgICBhcGlBcHAgLT4gZGF0YWJhc2UgIkxlZSBkZSB5IGVzY3JpYmUgZW4iICJTUUwvQXN5bmNQRyIKICAgICAgICAgICAgZGF0YWJhc2UgLT4gc3RvcmFnZVZvbHVtZSAiQWxtYWNlbmEgZGF0b3MgZW4iICJJL08iCiAgICAgICAgfQoKICAgICAgICBlcnBTeXN0ZW0gPSBzb2Z0d2FyZVN5c3RlbSAiU2lzdGVtYXMgRVJQIChDbMOtbmljYXMpIiAiU2lzdGVtYSBleHRlcm5vIHF1ZSBjb25zdW1lIGxhIEFQSSBwYXJhIGFiYXN0ZWNpbWllbnRvIGF1dG9tYXRpemFkby4iCiAgICAgICAgCiAgICAgICAgcGF5bWVudEdhdGV3YXkgPSBzb2Z0d2FyZVN5c3RlbSAiUGFzYXJlbGEgZGUgUGFnb3MiICJQcm9jZXNhIHBhZ29zIChXZWJwYXkvTWVyY2Fkb1BhZ28pLiIKICAgICAgICBsb2dpc3RpY3NBUEkgPSBzb2Z0d2FyZVN5c3RlbSAiQVBJIGRlIExvZ8Otc3RpY2EiICJHZW5lcmEgdHJhY2tpbmcgZGUgZGVzcGFjaG9zIChTaGlwcG8vTW9jaykuIgogICAgICAgIAogICAgICAgIGluc3RpdHVjaW9uIC0+IG1lZGlzdG9ja1N5c3RlbSAiUmVhbGl6YSBwZWRpZG9zIgogICAgICAgIHBhY2llbnRlIC0+IG1lZGlzdG9ja1N5c3RlbSAiUmVhbGl6YSBjb21wcmFzIgogICAgICAgIAogICAgICAgIGVycFN5c3RlbSAtPiBhcGlBcHAgIkNvbnN1bWUgY2F0w6Fsb2dvIHkgc3RvY2siICJSRVNUL0hUVFBTIgogICAgICAgIAogICAgICAgIGFwaUFwcCAtPiBwYXltZW50R2F0ZXdheSAiSW5pY2lhIHBhZ29zIiAiUkVTVC9IVFRQUyIKICAgICAgICBhcGlBcHAgLT4gbG9naXN0aWNzQVBJICJTb2xpY2l0YSB0cmFja2luZyIgIlJFU1QvSFRUUFMiCiAgICB9CgogICAgdmlld3MgewogICAgICAgIHN5c3RlbUNvbnRleHQgbWVkaXN0b2NrU3lzdGVtICJTeXN0ZW1Db250ZXh0IiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0CiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIgbWVkaXN0b2NrU3lzdGVtICJDb250YWluZXJzIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvTGF5b3V0CiAgICAgICAgfQoKICAgICAgICB0aGVtZSBkZWZhdWx0CiAgICB9Cn0="
+  },
+  "views" : {
+    "configuration" : {
+      "branding" : { },
+      "styles" : { },
+      "terminology" : { },
+      "themes" : [ "https://static.structurizr.com/themes/default/theme.json" ]
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "14"
+      }, {
+        "id" : "16"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "7"
+      }, {
+        "id" : "8"
+      } ],
+      "softwareSystemId" : "3"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "12"
+      }, {
+        "id" : "13"
+      }, {
+        "id" : "15"
+      }, {
+        "id" : "17"
+      }, {
+        "id" : "19"
+      } ],
+      "softwareSystemId" : "3"
+    } ]
+  }
+}
