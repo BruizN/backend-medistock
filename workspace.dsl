@@ -8,8 +8,10 @@ workspace "Medistock" "Plataforma de comercio electrónico unificada para insumo
             
             apiApp = container "API RESTful (FastAPI)" "Provee servicios de catálogo, inventario y órdenes" "Python/FastAPI"
             database = container "Base de Datos" "Almacena información de productos, inventario, usuarios y órdenes" "PostgreSQL"
+            storageVolume = container "Volumen de Datos" "Persistencia física de la base de datos" "Docker Volume (pg_data)"
             
             apiApp -> database "Lee de y escribe en" "SQL/AsyncPG"
+            database -> storageVolume "Almacena datos en" "I/O"
         }
 
         erpSystem = softwareSystem "Sistemas ERP (Clínicas)" "Sistema externo que consume la API para abastecimiento automatizado."
