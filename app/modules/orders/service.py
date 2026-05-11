@@ -60,7 +60,7 @@ class OrderService:
                 buy_order=new_order.id.hex[:20], # Webpay has limit on buy_order length
                 session_id=session_id,
                 amount=total_amount,
-                return_url="http://localhost:8000/api/v1/orders/callback"
+                return_url=return_url
             )
         except Exception:
             raise HTTPException(status_code=500, detail="Error initiating payment gateway")
