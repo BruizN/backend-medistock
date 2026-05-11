@@ -55,11 +55,13 @@ class OrderService:
         # Initialize Webpay
         session_id = f"sess_{new_order.id.hex[:8]}"
         try:
+            # We must use the backend URL for return_url because Webpay does a POST request.
+            # Pure frontend SPA cannot process POST bodies.
             tx_response = self.payment_service.create_transaction(
                 buy_order=new_order.id.hex[:20], # Webpay has limit on buy_order length
                 session_id=session_id,
                 amount=total_amount,
-                return_url=return_url
+                return_url="http://localhost:8000/api/v1/orders/callback"
             )
         except Exception:
             raise HTTPException(status_code=500, detail="Error initiating payment gateway")
