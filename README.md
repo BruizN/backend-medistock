@@ -19,9 +19,19 @@ La arquitectura sigue el patrón de Monolito Modular con Separación en Capas (L
 * `core/`: Configuraciones, dependencias, utilidades y conexión a base de datos.
 
 ## Configuración e Instalación
+Para levantar todo el ecosistema (Backend, Frontend y Base de Datos) con un solo comando:
+
 1. Clonar el repositorio.
-2. Configurar el archivo `.env`.
-3. Ejecutar `docker-compose up --build`.
+2. Configurar el archivo `.env` en la raíz (puedes copiar el `.env.example`).
+3. Ejecutar el siguiente comando para levantar todos los servicios:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+Una vez que los contenedores estén corriendo:
+* **Frontend SPA:** Estará disponible en `http://localhost:5173`
+* **Backend API:** Estará disponible en `http://localhost:8000`
+* **Swagger UI:** Estará disponible en `http://localhost:8000/docs`
 
 ## Documentación de Arquitectura (Modelo 4+1)
 Acceso a los diagramas de despliegue y organización:
