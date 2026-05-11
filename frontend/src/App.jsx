@@ -78,7 +78,7 @@ function App() {
         await login(email, password);
       }
     } catch (err) {
-      setError('Error connecting to authentication service.');
+      setError(`Network error connecting to API (${API_URL}). Details: ${err.message}`);
     } finally {
       setLoading(false);
     }
