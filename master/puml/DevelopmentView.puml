@@ -1,0 +1,34 @@
+@startuml
+set separator none
+title Medistock E-Commerce - Containers
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+Person(InstituciónClínica, "Institución (Clínica)", $descr="Compra insumos médicos al por mayor.", $tags="", $link="")
+Person(Paciente, "Paciente", $descr="Compra insumos médicos (B2C).", $tags="", $link="")
+System(SistemasERPClínicas, "Sistemas ERP (Clínicas)", $descr="Sistema externo que consume la API para abastecimiento automatizado.", $tags="", $link="")
+System(PasareladePagos, "Pasarela de Pagos", $descr="Procesa pagos (Webpay/MercadoPago).", $tags="", $link="")
+System(APIdeDivisas, "API de Divisas", $descr="Convierte moneda en tiempo real.", $tags="", $link="")
+
+System_Boundary("MedistockECommerce_boundary", "Medistock E-Commerce", $tags="") {
+  Container(MedistockECommerce.BasedeDatos, "Base de Datos", $techn="PostgreSQL", $descr="Almacena información de productos, inventario, usuarios y órdenes", $tags="", $link="")
+  Container(MedistockECommerce.VolumendeDatos, "Volumen de Datos", $techn="Docker Volume (pg_data)", $descr="Persistencia física de la base de datos", $tags="", $link="")
+  Container(MedistockECommerce.FrontendSPAReact, "Frontend SPA (React)", $techn="Vite/React", $descr="Proporciona toda la funcionalidad de compras al usuario", $tags="", $link="")
+  Container(MedistockECommerce.APIRESTfulFastAPI, "API RESTful (FastAPI)", $techn="Python/FastAPI", $descr="Provee servicios de catálogo, inventario, usuarios y órdenes", $tags="", $link="")
+}
+
+Rel(MedistockECommerce.FrontendSPAReact, MedistockECommerce.APIRESTfulFastAPI, "Realiza llamadas API", $techn="JSON/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, MedistockECommerce.BasedeDatos, "Lee de y escribe en", $techn="SQL/AsyncPG", $tags="", $link="")
+Rel(MedistockECommerce.BasedeDatos, MedistockECommerce.VolumendeDatos, "Almacena datos en", $techn="I/O", $tags="", $link="")
+Rel(InstituciónClínica, MedistockECommerce.FrontendSPAReact, "Realiza pedidos institucionales", $techn="", $tags="", $link="")
+Rel(Paciente, MedistockECommerce.FrontendSPAReact, "Realiza compras particulares", $techn="", $tags="", $link="")
+Rel(SistemasERPClínicas, MedistockECommerce.APIRESTfulFastAPI, "Consume catálogo y stock", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, PasareladePagos, "Inicia y valida pagos", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, APIdeDivisas, "Solicita conversión", $techn="REST/HTTPS", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml

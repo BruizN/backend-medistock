@@ -1,0 +1,33 @@
+@startuml
+set separator none
+title Medistock E-Commerce - Deployment - Production
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+!include <C4/C4_Deployment>
+
+Deployment_Node(Production.CloudPlatformPaaS, "Cloud Platform (PaaS)", $type="", $descr="", $tags="", $link="") {
+  Deployment_Node(Production.CloudPlatformPaaS.VercelNetlify, "Vercel / Netlify", $type="", $descr="", $tags="", $link="") {
+    Container(Production.CloudPlatformPaaS.VercelNetlify.FrontendSPAReact_1, "Frontend SPA (React)", $techn="Vite/React", $descr="Proporciona toda la funcionalidad de compras al usuario", $tags="", $link="")
+  }
+
+  Deployment_Node(Production.CloudPlatformPaaS.RenderRailway, "Render / Railway", $type="", $descr="", $tags="", $link="") {
+    Container(Production.CloudPlatformPaaS.RenderRailway.APIRESTfulFastAPI_1, "API RESTful (FastAPI)", $techn="Python/FastAPI", $descr="Provee servicios de catálogo, inventario, usuarios y órdenes", $tags="", $link="")
+  }
+
+  Deployment_Node(Production.CloudPlatformPaaS.NeonSupabase, "Neon / Supabase", $type="", $descr="", $tags="", $link="") {
+    Container(Production.CloudPlatformPaaS.NeonSupabase.BasedeDatos_1, "Base de Datos", $techn="PostgreSQL", $descr="Almacena información de productos, inventario, usuarios y órdenes", $tags="", $link="")
+    Container(Production.CloudPlatformPaaS.NeonSupabase.VolumendeDatos_1, "Volumen de Datos", $techn="Docker Volume (pg_data)", $descr="Persistencia física de la base de datos", $tags="", $link="")
+  }
+
+}
+
+Rel(Production.CloudPlatformPaaS.VercelNetlify.FrontendSPAReact_1, Production.CloudPlatformPaaS.RenderRailway.APIRESTfulFastAPI_1, "Realiza llamadas API", $techn="JSON/HTTPS", $tags="", $link="")
+Rel(Production.CloudPlatformPaaS.RenderRailway.APIRESTfulFastAPI_1, Production.CloudPlatformPaaS.NeonSupabase.BasedeDatos_1, "Lee de y escribe en", $techn="SQL/AsyncPG", $tags="", $link="")
+Rel(Production.CloudPlatformPaaS.NeonSupabase.BasedeDatos_1, Production.CloudPlatformPaaS.NeonSupabase.VolumendeDatos_1, "Almacena datos en", $techn="I/O", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml

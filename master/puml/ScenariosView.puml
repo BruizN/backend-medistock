@@ -1,0 +1,29 @@
+@startuml
+set separator none
+title Medistock E-Commerce - Dynamic
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+System_Boundary("MedistockECommerce_boundary", "Medistock E-Commerce", $tags="") {
+  Container(MedistockECommerce.BasedeDatos, "Base de Datos", $techn="PostgreSQL", $descr="Almacena información de productos, inventario, usuarios y órdenes", $tags="", $link="")
+  Container(MedistockECommerce.FrontendSPAReact, "Frontend SPA (React)", $techn="Vite/React", $descr="Proporciona toda la funcionalidad de compras al usuario", $tags="", $link="")
+  Container(MedistockECommerce.APIRESTfulFastAPI, "API RESTful (FastAPI)", $techn="Python/FastAPI", $descr="Provee servicios de catálogo, inventario, usuarios y órdenes", $tags="", $link="")
+}
+
+Person(Paciente, "Paciente", $descr="Compra insumos médicos (B2C).", $tags="", $link="")
+System(PasareladePagos, "Pasarela de Pagos", $descr="Procesa pagos (Webpay/MercadoPago).", $tags="", $link="")
+System(APIdeDivisas, "API de Divisas", $descr="Convierte moneda en tiempo real.", $tags="", $link="")
+
+Rel(Paciente, MedistockECommerce.FrontendSPAReact, "1. 1. Añade al carrito y checkout", $techn="", $tags="", $link="")
+Rel(MedistockECommerce.FrontendSPAReact, MedistockECommerce.APIRESTfulFastAPI, "2. 2. POST /orders", $techn="JSON/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, APIdeDivisas, "3. 3. Obtiene tipo de cambio", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, PasareladePagos, "4. 4. Inicia transacción Webpay", $techn="REST/HTTPS", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, MedistockECommerce.BasedeDatos, "5. 5. Guarda orden pendiente", $techn="SQL/AsyncPG", $tags="", $link="")
+Rel(MedistockECommerce.APIRESTfulFastAPI, MedistockECommerce.FrontendSPAReact, "6. 6. Retorna URL de pago", $techn="JSON/HTTPS", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml
