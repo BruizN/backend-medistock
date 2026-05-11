@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     
     # Frontend config
     FRONTEND_URL: str = "http://localhost:5173"
+    
+    # Backend config
+    BACKEND_URL: str = "http://localhost:8000"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod

@@ -28,7 +28,7 @@ async def checkout(
 ):
     # Determine origin or use a specific frontend URL
     # Return URL is now handled by the backend directly inside the service
-    return_url = str(request.url_for("webpay_callback"))
+    return_url = f"{settings.BACKEND_URL}{settings.API_V1_STR}/orders/callback"
     return await service.create_checkout(current_user, order_in, return_url)
 
 @router.post("/callback", include_in_schema=False)
