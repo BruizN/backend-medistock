@@ -11,6 +11,9 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = Field(alias="POSTGRES_URL")
+    
+    # Frontend config
+    FRONTEND_URL: str = "http://localhost:5173"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
