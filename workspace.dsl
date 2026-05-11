@@ -36,6 +36,21 @@ workspace "Medistock" "Plataforma de comercio electrónico unificada para insumo
         
         ordersComponent -> paymentGateway "Inicia y valida pagos" "REST/HTTPS"
         ordersComponent -> currencyAPI "Solicita conversión" "REST/HTTPS"
+        
+        deploymentEnvironment "Production" {
+            deploymentNode "Cloud Platform (PaaS)" {
+                deploymentNode "Vercel / Netlify" {
+                    containerInstance singlePageApp
+                }
+                deploymentNode "Render / Railway" {
+                    containerInstance apiApp
+                }
+                deploymentNode "Neon / Supabase" {
+                    containerInstance database
+                    containerInstance storageVolume
+                }
+            }
+        }
     }
 
     views {
@@ -65,16 +80,8 @@ workspace "Medistock" "Plataforma de comercio electrónico unificada para insumo
         }
         
         deployment medistockSystem "Production" "PhysicalView" "Vista Física (Deployment)" {
-            deploymentNode "AWS Cloud" {
-                deploymentNode "EC2 Instance - Frontend" {
-                    containerInstance singlePageApp
-                }
-                deploymentNode "EC2 Instance - Backend" {
-                    containerInstance apiApp
-                    containerInstance database
-                    containerInstance storageVolume
-                }
-            }
+            include *
+            autoLayout
         }
 
         theme default
