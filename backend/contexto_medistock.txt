@@ -1,0 +1,42 @@
+CASO DE ESTUDIO 1
+Distribuidora de Insumos y Equipamiento Clínico "MEDISTOCK"
+Contexto: La industria de la salud y el abastecimiento clínico en Chile ha experimentado una transformación radical en la última década. Esto ha generado una demanda crítica y constante de insumos médicos, desde material descartable (jeringas, guantes) hasta equipamiento de alta complejidad (monitores de signos vitales). A diferencia del retail tradicional, este sector exige tiempos de respuesta inmediatos y un control de inventario estricto, ya que un quiebre de stock puede afectar la atención de pacientes.
+"MEDISTOCK" es una distribuidora establecida en la comuna de Providencia desde principios de los 2000. Cuenta con 3 centros de distribución en la Región Metropolitana y 2 en el sur de Chile. Abastece tanto a grandes redes de clínicas (B2B) como a pacientes particulares con hospitalización domiciliaria (B2C).
+Cada sucursal de "MEDISTOCK" tiene una estructura organizativa clara, con roles definidos:
+•	Administrador: Encargado de generar informes de venta y gestionar alianzas estratégicas con clínicas.
+•	Ejecutivo de Cuentas (Vendedor): Asesora a instituciones, gestiona cotizaciones complejas y procesa pedidos.
+•	Operador Logístico (Bodeguero): Mantiene el inventario con control de lotes/caducidad, prepara el picking clínico y despacha.
+•	Analista de Finanzas (Contador): Registra transacciones, concilia pagos de aseguradoras y elabora reportes financieros.
+
+
+
+
+
+PASO 1 (Análisis y Planificación): Tras una auditoría interna, "MEDISTOCK" notó que su modelo de ventas basado en correos electrónicos y llamadas está colapsando. Los ejecutivos invierten el 70% de su tiempo respondiendo a las clínicas si hay stock de un producto crítico. Se ha decidido contratar a su consultora tecnológica para diseñar una plataforma de comercio electrónico unificada.
+El sitio web debe incluir:
+•	Sistema de Inicio de Sesión segmentado para Instituciones (Clínicas), Pacientes, Administradores, Ejecutivos, Operadores Logísticos y Analistas.
+•	Vista Cliente (Institución/Paciente): Visualizar catálogo en tiempo real, comprar mediante carrito, seleccionar despacho express o normal, y opciones de pago.
+•	Vista Ejecutivo: Revisar stock en múltiples bodegas, aprobar compras institucionales y derivar órdenes a logística.
+•	Vista Operador Logístico: Ver órdenes priorizadas por urgencia médica, confirmar preparación y despachar.
+•	Vista Analista de Finanzas: Confirmar transferencias y auditar pagos.
+
+
+
+
+
+
+PASO 2 (Construcción e integración): "MEDISTOCK" cuenta con un portal corporativo base. Para modernizar su arquitectura, se exige que la nueva solución tecnológica contemple estrictamente lo siguiente:
+1.	Construcción de API Propia (Exposición de Servicios): Se debe construir una API REST/Webservice que exponga el catálogo de productos, precios y el stock actualizado en tiempo real. El objetivo de esta API es que los sistemas ERP de las grandes clínicas (sistemas externos) puedan conectarse y consumir esta información de manera automatizada para abastecerse sin intervención humana. Ejemplo de endpoint esperado: GET /api/v1/productos/{codigo_producto}
+•	Integración 1 (Pagos): Integración con la API de una Pasarela de Pagos (ej. Webpay Plus de Transbank o MercadoPago) para procesar las compras de los pacientes particulares (B2C) con tarjetas de crédito/débito.
+•	Integración 2 (Logística y Trazabilidad): Las clínicas exigen saber exactamente dónde viene su pedido urgente. El sistema debe consumir una API de logística para generar el número de seguimiento (Tracking). Los estudiantes pueden utilizar el modo test de la API de Shippo, o en su defecto definir alguna otra API en conjunto con el docente.
+•	Existe la posibilidad también de construir un simulador de courier utilizando herramientas gratuitas como MockAPI.io o Postman Mock Servers para emular las respuestas de un operador logístico nacional.
+•	Nota importante sobre las integraciones: El docente a cargo de la sección tiene la total facultad de asignar, modificar o autorizar el uso de APIs si no existen sandbox disponibles, siempre que estas cumplan con el nivel de complejidad requerido y permitan alcanzar los objetivos de integración de la asignatura.
+
+
+
+
+PASO 3 (Pruebas, validación y documentación): Tras concluir la construcción, se inicia la etapa de pruebas para verificar la funcionalidad y la correcta comunicación de las tres APIs (la propia y las dos consumidas).
+•	Se debe elaborar un diseño de casos de prueba para cada componente (utilizando plantillas formales o herramientas como Testlink).
+•	Se debe elaborar un documento de Plan de Pruebas que incluya: Propósito, Alcance, Descripción, Resumen de pruebas, Entorno, Calendarización, Matriz de riesgos y Criterios de cierre.
+•	El sistema debe ser sometido, como mínimo, a pruebas automatizadas de las APIs utilizando herramientas como Postman o JMeter para asegurar que la integración logística y de pagos responde correctamente.
+
