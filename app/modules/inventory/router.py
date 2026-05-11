@@ -4,7 +4,8 @@ from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.dependencies import get_db_session
+from app.core.dependencies import get_db_session, get_current_user
+from app.modules.auth.models import User
 from app.modules.inventory.repository import ProductRepository
 from app.modules.inventory.schemas import ProductCreate, ProductResponse, ProductUpdate
 from app.modules.inventory.service import ProductService
@@ -19,7 +20,9 @@ def get_product_service(session: AsyncSession = Depends(get_db_session)) -> Prod
 
 @router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def create_product(
-    product_in: ProductCreate, service: ProductService = Depends(get_product_service)
+    product_in: ProductCreate, 
+    service: ProductService = Depends(get_product_service),
+    current_user: User = Depends(get_current_user)
 ):
     return await service.create_product(product_in)
 
