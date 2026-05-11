@@ -19,19 +19,27 @@ La arquitectura sigue el patrón de Monolito Modular con Separación en Capas (L
 * `core/`: Configuraciones, dependencias, utilidades y conexión a base de datos.
 
 ## Configuración e Instalación
-Para levantar todo el ecosistema (Backend, Frontend y Base de Datos) con un solo comando:
 
+### Backend (Docker)
 1. Clonar el repositorio.
 2. Configurar el archivo `.env` en la raíz (puedes copiar el `.env.example`).
-3. Ejecutar el siguiente comando para levantar todos los servicios:
+3. Ejecutar el siguiente comando para levantar la API y la Base de Datos:
    ```bash
    docker-compose up --build -d
    ```
 
-Una vez que los contenedores estén corriendo:
-* **Frontend SPA:** Estará disponible en `http://localhost:5173`
+Una vez corriendo:
 * **Backend API:** Estará disponible en `http://localhost:8000`
 * **Swagger UI:** Estará disponible en `http://localhost:8000/docs`
+
+### Frontend Cliente (Local)
+El cliente está construido como un proyecto independiente en la carpeta `frontend/`. Para iniciarlo:
+1. Abre una nueva terminal.
+2. Navega al directorio: `cd frontend`
+3. Instala dependencias: `npm install`
+4. Levanta el servidor de desarrollo: `npm run dev`
+
+El frontend estará disponible en `http://localhost:5173`.
 
 ## Documentación de Arquitectura (Modelo 4+1)
 Acceso a los diagramas de despliegue y organización:
