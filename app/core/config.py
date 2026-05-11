@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "MEDISTOCK API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
+    SECRET_KEY: str = "supersecretkey_change_in_production"
+    ALGORITHM: str = "HS256"
 
     # Database
     DATABASE_URL: str = Field(alias="POSTGRES_URL")
