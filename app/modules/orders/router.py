@@ -32,7 +32,10 @@ async def checkout(
     return await service.create_checkout(current_user, order_in, return_url)
 
 @router.api_route("/callback", methods=["GET", "POST"], include_in_schema=False)
-async def webpay_callback(request: Request):
+async def webpay_callback(
+    request: Request,
+    service: OrderService = Depends(get_order_service)
+):
     """
     Recibe el POST o GET de Transbank.
     """
@@ -52,7 +55,12 @@ async def webpay_callback(request: Request):
         return RedirectResponse(f"{frontend_url}?status=cancelled&token={token}", status_code=303)
     
     if token_ws:
-        return RedirectResponse(f"{frontend_url}?status=authorized&token={token_ws}", status_code=303)
+        try:
+            # Validate payment status directly
+            await service.confirm_payment(token_ws)
+            return RedirectResponse(f"{frontend_url}?status=authorized&token={token_ws}", status_code=303)
+        except Exception:
+            return RedirectResponse(f"{frontend_url}?status=rejected&token={token_ws}", status_code=303)
         
     return RedirectResponse(f"{frontend_url}?status=error", status_code=303)
 
