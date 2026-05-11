@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.dependencies import get_db_session, get_current_user
+from app.core.config import settings
 from app.modules.auth.models import User
 from app.modules.orders.schemas import OrderCreate, PaymentInitResponse
 from app.modules.orders.service import OrderService
@@ -27,7 +28,7 @@ async def checkout(
 ):
     # Determine origin or use a specific frontend URL
     # Return URL is now handled by the backend directly inside the service
-    return_url = "http://localhost:8000/api/v1/orders/callback"
+    return_url = str(request.url_for("webpay_callback"))
     return await service.create_checkout(current_user, order_in, return_url)
 
 @router.post("/callback", include_in_schema=False)
@@ -44,7 +45,7 @@ async def webpay_callback(
     Si viene TBK_TOKEN, el pago fue anulado por el usuario.
     """
     token = token_ws or TBK_TOKEN
-    frontend_url = "http://localhost:5173/payment/callback"
+    frontend_url = f"{settings.FRONTEND_URL}/payment/callback"
     
     if TBK_TOKEN:
         # Pago anulado por usuario
