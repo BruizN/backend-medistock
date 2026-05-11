@@ -4,7 +4,6 @@ from typing import Optional
 import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
-from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings

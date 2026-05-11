@@ -1,7 +1,6 @@
 import jwt
 from fastapi import Depends, HTTPException, status
 from typing import AsyncGenerator
-from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi.security import OAuth2PasswordBearer
 from app.core.config import settings
@@ -10,9 +9,7 @@ from app.core.db import async_session_maker
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
-from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.db import async_session_maker
 
 
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:

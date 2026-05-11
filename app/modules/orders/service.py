@@ -1,5 +1,4 @@
-import uuid
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.modules.orders.models import Order, OrderItem
 from app.modules.orders.schemas import OrderCreate, PaymentInitResponse
@@ -40,7 +39,7 @@ class OrderService:
             
         # Get external currency conversion just to log or show, but we will charge in CLP for Webpay
         # We assume product prices are in CLP for this mock, but we fetch the rate to fulfill IL3.3
-        usd_rate = await CurrencyService.get_usd_to_clp()
+        await CurrencyService.get_usd_to_clp()
         
         # Create order
         new_order = Order(user_id=user.id, total_amount=total_amount, status="pending")

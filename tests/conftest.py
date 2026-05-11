@@ -8,8 +8,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.main import app
-from app.core.dependencies import get_db_session 
+from app.core.dependencies import get_db_session, get_current_user
 from app.modules.inventory.models import Product
+from app.modules.auth.models import User
 
 load_dotenv()
 
@@ -52,7 +53,12 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     async def override_get_db_session():
         yield db_session
 
+    async def override_get_current_user():
+        import uuid
+        return User(id=uuid.uuid4(), email="test@medistock.com", role="admin")
+
     app.dependency_overrides[get_db_session] = override_get_db_session
+    app.dependency_overrides[get_current_user] = override_get_current_user
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
         yield c
