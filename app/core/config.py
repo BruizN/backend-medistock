@@ -10,7 +10,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
 
     # Database
-    DATABASE_URL: str = Field(alias="POSTGRES_URL")
+    DATABASE_URL: str = Field(
+        default="postgresql+asyncpg://usuario:miContraseÑasegura123@db:5432/miBD",
+        alias="POSTGRES_URL"
+    )
     
     # Frontend config
     FRONTEND_URL: str = "http://localhost:5173"
