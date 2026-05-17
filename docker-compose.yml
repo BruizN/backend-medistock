@@ -3,8 +3,6 @@ services:
     build: .
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
     depends_on:
       db:
         condition: service_healthy
@@ -35,8 +33,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB_TEST:-begamer_test}
       POSTGRES_USER: ${POSTGRES_USER:-usuario}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-miContraseÑasegura123}
-    ports:
-      - "5433:5432"  
     volumes:
       - type: tmpfs
         target: /var/lib/postgresql/data
