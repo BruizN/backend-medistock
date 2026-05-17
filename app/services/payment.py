@@ -9,16 +9,27 @@ logger = logging.getLogger(__name__)
 
 class WebpayService:
     def __init__(self):
-        # We use the integration/sandbox environment
+        """
+        PREGUNTA DEL PROFESOR: "¿Cómo se conectan a Webpay de forma segura?"
+        Respuesta: Usamos el SDK oficial de Transbank para Python (transbank-sdk).
+        En lugar de usar credenciales reales, inicializamos el SDK con IntegrationType.TEST.
+        Esto nos conecta al entorno "Sandbox" (de pruebas) usando los CommerceCodes públicos
+        de Transbank, evitando exponer datos bancarios reales en el código.
+        """
         self.options = WebpayOptions(
             IntegrationCommerceCodes.WEBPAY_PLUS, 
             IntegrationApiKeys.WEBPAY, 
             IntegrationType.TEST
         )
         self.tx = Transaction(self.options)
-        # By default, transbank-sdk uses Integration (Sandbox) credentials when initialized without args
     
     def create_transaction(self, buy_order: str, session_id: str, amount: float, return_url: str):
+        """
+        Paso 1 del Flujo Webpay: "Crear Transacción".
+        Le enviamos a Transbank el monto y el ID de la orden. Transbank nos responde
+        con una URL segura y un Token único. Luego el Frontend usa esos datos
+        para redirigir al usuario a la pantalla de pago del banco.
+        """
         try:
             response = self.tx.create(
                 buy_order=buy_order,
@@ -28,13 +39,21 @@ class WebpayService:
             )
             return response
         except Exception as e:
-            logger.error(f"Error creating Webpay transaction: {e}")
+            logger.error(f"Error creando transacción Webpay: {e}")
             raise
 
     def commit_transaction(self, token: str):
+        """
+        Paso 2 del Flujo Webpay: "Confirmar Transacción" (MUY IMPORTANTE).
+        PREGUNTA DEL PROFESOR: "¿Cómo saben si el pago realmente funcionó?"
+        Respuesta: Cuando el usuario vuelve de Webpay, Transbank nos entrega el Token. 
+        Obligatoriamente debemos llamar a 'tx.commit(token)'. Esta función consulta a Transbank 
+        "¿Este token fue aprobado o rechazado por el banco?". Si no hacemos este paso, 
+        podríamos entregar productos gratis a tarjetas rechazadas.
+        """
         try:
             response = self.tx.commit(token=token)
             return response
         except Exception as e:
-            logger.error(f"Error committing Webpay transaction: {e}")
+            logger.error(f"Error confirmando transacción Webpay (token inválido o expirado): {e}")
             raise
