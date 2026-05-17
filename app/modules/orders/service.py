@@ -29,8 +29,8 @@ class OrderService:
             if not product:
                 raise HTTPException(status_code=404, detail=f"Producto {item_in.product_id} no encontrado")
             
-            # PREGUNTA PROFESOR: ¿Qué pasa si múltiples personas compran a la vez?
-            # Respuesta: Aquí hacemos una validación rápida de stock antes de crear la orden.
+
+            #Aquí hacemos una validación rápida de stock antes de crear la orden.
             if product.stock < item_in.quantity:
                 raise HTTPException(status_code=400, detail=f"Stock insuficiente para {product.name}")
             
@@ -45,7 +45,6 @@ class OrderService:
             )
             
         # Llamamos a nuestra segunda API (Mindicador/Frankfurter) de forma asíncrona.
-        # Esto cumple con el requisito de integración externa IL3.3, aunque le cobramos
         # al usuario en CLP (Pesos) a través de Webpay, obtenemos el valor del dólar para reportería.
         await CurrencyService.get_usd_to_clp()
         
@@ -94,8 +93,7 @@ class OrderService:
         except Exception:
             raise HTTPException(status_code=400, detail="Token de transacción inválido o expirado")
             
-        # PREGUNTA PROFESOR: ¿Basta con tener un token de Transbank para saber que el pago fue exitoso?
-        # Respuesta: No. Transbank devuelve el token en la URL tanto para pagos exitosos como para rechazos.
+        #Transbank devuelve el token en la URL tanto para pagos exitosos como para rechazos.
         # Es obligatorio hacer este 'tx.commit()' y luego verificar que el "status" sea "AUTHORIZED".
         # Si no lo hacemos, estaríamos entregando productos por compras fallidas.
         if response.get("status") == "AUTHORIZED":

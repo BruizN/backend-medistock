@@ -10,8 +10,7 @@ logger = logging.getLogger(__name__)
 class WebpayService:
     def __init__(self):
         """
-        PREGUNTA DEL PROFESOR: "¿Cómo se conectan a Webpay de forma segura?"
-        Respuesta: Usamos el SDK oficial de Transbank para Python (transbank-sdk).
+        Usamos el SDK oficial de Transbank para Python (transbank-sdk).
         En lugar de usar credenciales reales, inicializamos el SDK con IntegrationType.TEST.
         Esto nos conecta al entorno "Sandbox" (de pruebas) usando los CommerceCodes públicos
         de Transbank, evitando exponer datos bancarios reales en el código.
@@ -44,9 +43,7 @@ class WebpayService:
 
     def commit_transaction(self, token: str):
         """
-        Paso 2 del Flujo Webpay: "Confirmar Transacción" (MUY IMPORTANTE).
-        PREGUNTA DEL PROFESOR: "¿Cómo saben si el pago realmente funcionó?"
-        Respuesta: Cuando el usuario vuelve de Webpay, Transbank nos entrega el Token. 
+        Cuando el usuario vuelve de Webpay, Transbank nos entrega el Token. 
         Obligatoriamente debemos llamar a 'tx.commit(token)'. Esta función consulta a Transbank 
         "¿Este token fue aprobado o rechazado por el banco?". Si no hacemos este paso, 
         podríamos entregar productos gratis a tarjetas rechazadas.

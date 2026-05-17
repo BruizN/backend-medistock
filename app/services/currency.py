@@ -9,8 +9,7 @@ class CurrencyService:
         """
         Obtiene el tipo de cambio actual desde una API externa (open.er-api.com).
         
-        PREGUNTA DEL PROFESOR: "¿Qué pasa si esta API externa se cae?"
-        Respuesta en código: Usamos un bloque try-except. Si ocurre cualquier error 
+        Usamos un bloque try-except. Si ocurre cualquier error 
         de red (httpx.RequestError) o excepción, lo capturamos en el 'except Exception as e' 
         y en lugar de que el servidor "crashee", devolvemos un valor por defecto (Fallback de 950.0). 
         Esto asegura que el sistema siga funcionando de forma resiliente.
